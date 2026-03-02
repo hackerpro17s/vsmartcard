@@ -102,3 +102,21 @@ jobs:
         name: ACardEmulator
         path:
           ACardEmulator/app/build/outputs/apk
+
+  virtualsmartcard-windows-x64:
+    runs-on: windows-2022
+    env:
+      MSBUILD_PLATFORM: x64
+      VCVARS_PLATFORM: amd64
+    steps:
+    - uses: actions/checkout@v4
+    - run: .github/build-virtualsmartcard.ps1
+    - uses: actions/upload-artifact@v4
+      with:
+        name: virtualsmartcard-win64
+        path:
+          virtualsmartcard/win32/${{ env.MSBUILD_PLATFORM }}/Release/BixVReader.dll
+          virtualsmartcard/win32/install_vpcd.bat
+          virtualsmartcard/win32/uninstall_vpcd.bat
+          virtualsmartcard/dist/vicc.exe
+          vpcd-config.exe

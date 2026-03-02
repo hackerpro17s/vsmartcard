@@ -2,7 +2,7 @@ platform:
  - x86
  - x64
 
-os: Visual Studio 2019
+os: Visual Studio 2022
 
 install:
  - set PATH=PATH=C:\Python36;C:\Python36\\Scripts;C:\\cygwin\\bin;%PATH%
@@ -23,7 +23,8 @@ install:
        $env:ARTIFACT="virtualsmartcard_win64"
        $env:X64="x64\"
      }
- - git submodule update --init --recursive
+
+ - ps: .github/build-virtualsmartcard.ps1
  
  # BUGFIX: wdf directory was renamed to 00wdf, rename it back (see github.com/appveyor/ci/issues/414)
  #- ps: ren 'C:\Program Files (x86)\Windows Kits\10\include\00wdf' 'wdf'
@@ -46,7 +47,7 @@ install:
  - pip install pyinstaller
 
  # set Visual Studio 2019 build environment
- - call "%ProgramFiles(x86)%/Microsoft Visual Studio/2019/Community/VC/Auxiliary/Build/vcvarsall.bat" %VCVARS_PLATFORM%
+ - call "%ProgramFiles(x86)%/Microsoft Visual Studio/2022/Community/VC/Auxiliary/Build/vcvarsall.bat" %VCVARS_PLATFORM%
 
 build_script:
  - md %ARTIFACT%
@@ -65,3 +66,4 @@ build_script:
 
  - 7z a %ARTIFACT%.zip %ARTIFACT%
  - appveyor PushArtifact %ARTIFACT%.zip
+
