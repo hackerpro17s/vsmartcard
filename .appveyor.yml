@@ -29,6 +29,7 @@ install:
  #- ps: ren 'C:\Program Files (x86)\Windows Kits\10\include\00wdf' 'wdf'
 
 
+ - winget install Microsoft.WindowsDriverKit
  - ps: $current_path = Get-Location | select -ExpandProperty Path
  - ps: $full_path = $current_path + "\swigwin-4.0.2.zip"
  - ps: $folder_path = $current_path + "\swig_win"
