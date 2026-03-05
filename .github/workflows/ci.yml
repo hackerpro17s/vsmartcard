@@ -1,16 +1,6 @@
 name: Build
 
 on:
-  pull_request:
-    paths:
-      - '**.c'
-      - '**.h'
-      - '**.in'
-      - '**.sh'
-      - '**.py'
-      - '**.java'
-      - .github/workflows/ci.yml
-  push:
   workflow_dispatch:
 
 
