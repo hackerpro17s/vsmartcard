@@ -11,6 +11,7 @@ on:
       - '**.java'
       - .github/workflows/ci.yml
   push:
+  workflow_dispatch:
 
 
 jobs:
