@@ -1,8 +1,6 @@
 $ErrorActionPreference = "Stop"
 Set-PSDebug -Trace 1
 
-& git submodule update --init --recursive
-
 $VS_PATH = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -property installationPath
 & "$VS_PATH\Common7\Tools\Launch-VsDevShell.ps1"
 Enter-VsDevShell -VsInstallPath "$VS_PATH" -Arch $env:VCVARS_PLATFORM -HostArch $env:VCVARS_PLATFORM -SkipAutomaticLocation
