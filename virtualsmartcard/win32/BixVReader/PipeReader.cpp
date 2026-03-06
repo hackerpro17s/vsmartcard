@@ -126,6 +126,7 @@ bool PipeReader::QueryATR(BYTE *ATR,DWORD *ATRsize,bool reset) {
 	}
 	if (size==0)
 		return false;
+	size=min(size,*ATRsize);
 	if (!ReadFile(pipe,ATR,size,&read,NULL)) {
 		pipe=NULL;
 		return false;
