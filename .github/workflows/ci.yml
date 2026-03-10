@@ -102,3 +102,33 @@ jobs:
         name: ACardEmulator
         path:
           ACardEmulator/app/build/outputs/apk
+
+  virtualsmartcard-windows-x64:
+    runs-on: windows-2022
+    env:
+      MSBUILD_PLATFORM: x64
+      VCVARS_PLATFORM: amd64
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - run: .github/build-virtualsmartcard.ps1
+    - run: Move-Item -Path "virtualsmartcard\win32\BixVReaderInstaller\bin\${{ env.MSBUILD_PLATFORM }}\Release\BixVReaderInstaller.msi" -Destination "."
+    - run: Move-Item -Path "virtualsmartcard\win32\install_vpcd.bat" -Destination "."
+    - run: Move-Item -Path "virtualsmartcard\win32\uninstall_vpcd.bat" -Destination "."
+    - run: Move-Item -Path "dist\vicc.exe" -Destination "."
+    - run: Start-Process "install_vpcd.bat" -NoNewWindow -Wait
+    - run: Get-Content "install.log"
+    - uses: actions/upload-artifact@v4
+      with:
+        name: virtualsmartcard-win64
+        path: |
+          install_vpcd.bat
+          uninstall_vpcd.bat
+          vicc.exe
+          vpcd-config.exe
+# FIXME driver installation fails (see content of "install.log" above
+# The error persists since migrating to migrating to newer VS/WDK.
+# For now, skip publishing the driver and pull driver from previous releases
+#         BixVReaderInstaller.msi
+#         BixVReader.cer
