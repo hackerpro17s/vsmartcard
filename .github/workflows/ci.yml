@@ -17,7 +17,7 @@ jobs:
   virtualsmartcard-macos:
     runs-on: macos-14
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v6
     - run: .github/build-virtualsmartcard.sh macos
     - uses: actions/upload-artifact@v4
       with:
@@ -28,7 +28,7 @@ jobs:
   virtualsmartcard-ubuntu:
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v6
     - run: .github/build-virtualsmartcard.sh ubuntu
     - uses: actions/upload-artifact@v4
       with:
@@ -39,7 +39,7 @@ jobs:
   ccid-ubuntu:
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v6
     - run: .github/build-ccid.sh ubuntu
     - uses: actions/upload-artifact@v4
       with:
@@ -50,13 +50,13 @@ jobs:
   pcsc-relay-macos:
     runs-on: macos-14
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v6
     - run: .github/build-pcsc-relay.sh macos
 
   pcsc-relay-ubuntu:
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v6
     - run: .github/build-pcsc-relay.sh ubuntu
     - uses: actions/upload-artifact@v4
       with:
@@ -67,13 +67,13 @@ jobs:
 #  pcsc-relay-mingw-32:
 #    runs-on: ubuntu-24.04
 #    steps:
-#    - uses: actions/checkout@v2
+#    - uses: actions/checkout@v6
 #    - run: .github/build-pcsc-relay.sh mingw-32
 
   pcsc-relay-mingw-64:
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v6
     - run: .github/build-pcsc-relay.sh mingw-64
     - uses: actions/upload-artifact@v4
       with:
@@ -84,7 +84,7 @@ jobs:
   remote-reader-ubuntu:
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - run: .github/build-remote-reader.sh
     - uses: actions/upload-artifact@v4
       with:
@@ -95,7 +95,7 @@ jobs:
   ACardEmulator-ubuntu:
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - run: .github/build-ACardEmulator.sh
     - uses: actions/upload-artifact@v4
       with:
@@ -109,7 +109,7 @@ jobs:
       MSBUILD_PLATFORM: x64
       VCVARS_PLATFORM: amd64
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
       with:
         submodules: recursive
     - run: .github/build-virtualsmartcard.ps1
