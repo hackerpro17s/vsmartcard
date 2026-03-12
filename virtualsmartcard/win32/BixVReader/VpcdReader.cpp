@@ -70,6 +70,7 @@ bool VpcdReader::QueryATR(BYTE *ATR,DWORD *ATRsize,bool reset) {
 		if (atr_len > 0) {
 			/* TODO do length checking on length of ATR when ATRsize is
 			 * correctly initialized by Reader.cpp */
+			atr_len = min(atr_len, *ATRsize);
 			memcpy(ATR, atr, atr_len);
 			*ATRsize = atr_len;
 			free(atr);

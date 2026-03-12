@@ -107,6 +107,7 @@ bool TcpIpReader::QueryATR(BYTE *ATR,DWORD *ATRsize,bool reset) {
 	}
 	if (size==0)
 		return false;
+	size=min(size,*ATRsize);
 	if ((read=recv(AcceptSocket,(char*)ATR,size,MSG_WAITALL))<=0) {
 		::shutdown(AcceptSocket,SD_BOTH);
 		AcceptSocket=NULL;

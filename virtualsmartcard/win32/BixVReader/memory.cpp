@@ -1,7 +1,7 @@
 #include "memory.h"
 #include "SectionLocker.h"
 
-bool getBuffer(IWDFIoRequest* pRequest,void **buffer,int *bufferLen) {
+bool getBuffer(IWDFIoRequest* pRequest,void **buffer,SIZE_T *bufferLen) {
 	IWDFMemory *inmem=NULL;
 	pRequest->GetInputMemory(&inmem);
 	if (inmem==NULL) {
@@ -20,13 +20,13 @@ bool getBuffer(IWDFIoRequest* pRequest,void **buffer,int *bufferLen) {
 			memcpy(out,data,size);
 			(*buffer)=out;
 		}
-		(*bufferLen)=(int)size;
+		(*bufferLen)=size;
 		inmem->Release();
 		return true;
 	}
 }
 
-void setBuffer(CMyDevice *device,IWDFIoRequest* pRequest,void *result,int inSize) {
+void setBuffer(CMyDevice *device,IWDFIoRequest* pRequest,void *result,SIZE_T inSize) {
 	IWDFMemory *outmem=NULL;
 	pRequest->GetOutputMemory (&outmem);
 	if (outmem==NULL) {
@@ -42,7 +42,7 @@ void setBuffer(CMyDevice *device,IWDFIoRequest* pRequest,void *result,int inSize
 	}
 }
 
-void setString(CMyDevice *device,IWDFIoRequest* pRequest,char *result,int outSize) {
+void setString(CMyDevice *device,IWDFIoRequest* pRequest,char *result,SIZE_T outSize) {
 	IWDFMemory *outmem=NULL;
 	pRequest->GetOutputMemory (&outmem);
 	if (outmem==NULL) {
@@ -52,7 +52,7 @@ void setString(CMyDevice *device,IWDFIoRequest* pRequest,char *result,int outSiz
 	}
 	else {
 		SectionLocker lock(device->m_RequestLock);
-		int size=min(outSize,(int)strlen(result)+1);
+		SIZE_T size=min(outSize,strlen(result)+1);
 		outmem->CopyFromBuffer(0,result,size);
 		outmem->Release();
         pRequest->CompleteWithInformation(0,(SIZE_T)size);
@@ -84,6 +84,10 @@ DWORD getInt(IWDFIoRequest* pRequest) {
 	else {
 		SIZE_T size;
 		void *data=inmem->GetDataBuffer(&size);
+		if (size<sizeof(DWORD)) {
+			OutputDebugString(L"Invalid input");
+			return 0xffffffff;
+		}
 		DWORD d=*(DWORD *)data;
 		inmem->Release();
 		return d;
