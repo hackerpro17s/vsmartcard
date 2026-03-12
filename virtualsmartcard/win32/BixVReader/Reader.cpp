@@ -255,7 +255,7 @@ void Reader::IoSmartCardGetAttribute(IWDFIoRequest* pRequest,SIZE_T inBufSize,SI
 			if (rpcType==0) {
 				PipeReader *pipe=(PipeReader *)this;
 				OutputDebugString(L"[BixVReader][GATT]PIPE_NAME");
-				sprintf(temp,"%.*S",sizeof(temp),pipe->pipeName);
+				sprintf(temp,"%.*S",(int)sizeof(temp),pipe->pipeName);
 				temp[sizeof(temp)-1] = '\0';
 				setString(device,pRequest,(char*)temp,outBufSize);
 			}
@@ -269,7 +269,7 @@ void Reader::IoSmartCardGetAttribute(IWDFIoRequest* pRequest,SIZE_T inBufSize,SI
 			if (rpcType==0) {
 				PipeReader *pipe=(PipeReader *)this;
 				OutputDebugString(L"[BixVReader][GATT]EVENT_PIPE_NAME");
-				sprintf(temp,"%.*S",sizeof(temp),pipe->pipeEventName);
+				sprintf(temp,"%.*S",(int)sizeof(temp),pipe->pipeEventName);
 				temp[sizeof(temp)-1] = '\0';
 				setString(device,pRequest,(char*)temp,outBufSize);
 			}
@@ -333,17 +333,19 @@ void Reader::IoSmartCardGetAttribute(IWDFIoRequest* pRequest,SIZE_T inBufSize,SI
 			setInt(device,pRequest,deviceUnit);
 			return;
 		case SCARD_ATTR_ATR_STRING:
-			OutputDebugString(L"[BixVReader][GATT]SCARD_ATTR_ATR_STRING");
-			BYTE ATR[100];
-			DWORD ATRsize=sizeof(ATR);
-			if (!QueryATR(ATR,&ATRsize))
 			{
-				SectionLocker lock(device->m_RequestLock);
-				pRequest->CompleteWithInformation(STATUS_NO_MEDIA, 0);
+				OutputDebugString(L"[BixVReader][GATT]SCARD_ATTR_ATR_STRING");
+				BYTE ATR[100];
+				DWORD ATRsize=sizeof(ATR);
+				if (!QueryATR(ATR,&ATRsize))
+				{
+					SectionLocker lock(device->m_RequestLock);
+					pRequest->CompleteWithInformation(STATUS_NO_MEDIA, 0);
+					return;
+				}
+				setBuffer(device,pRequest,ATR,ATRsize);
 				return;
 			}
-			setBuffer(device,pRequest,ATR,ATRsize);
-			return;
 		case SCARD_ATTR_CURRENT_PROTOCOL_TYPE:
 			OutputDebugString(L"[BixVReader][GATT]SCARD_ATTR_CURRENT_PROTOCOL_TYPE");
 			setInt(device,pRequest,protocol); // T=0 or T=1
